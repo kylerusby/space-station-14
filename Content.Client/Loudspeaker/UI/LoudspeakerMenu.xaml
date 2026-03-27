@@ -1,0 +1,27 @@
+<ui:FancyWindow xmlns="https://spacestation14.io" xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
+                SetSize="420 550" Title="AI Loudspeaker">
+    <BoxContainer Margin="4 4" Orientation="Vertical" SeparationOverride="5">
+        <!-- Group selection area -->
+        <Label Text="Broadcast Groups:" StyleClasses="LabelSubText" />
+        <BoxContainer Name="GroupContainer" Orientation="Vertical" SeparationOverride="2"
+                      HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="3" />
+        <!-- Instrument selection -->
+        <Label Text="Instrument:" StyleClasses="LabelSubText" />
+        <OptionButton Name="InstrumentSelect" HorizontalExpand="True" />
+        <!-- MIDI controls -->
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="4">
+            <Button Name="FileButton" Text="Load MIDI" HorizontalExpand="True"
+                    SizeFlagsStretchRatio="1" />
+            <Button Name="PlayButton" Text="Play" HorizontalExpand="True"
+                    SizeFlagsStretchRatio="1" />
+            <Button Name="StopButton" Text="Stop" HorizontalExpand="True"
+                    SizeFlagsStretchRatio="1" />
+            <Button Name="LoopButton" ToggleMode="True" Text="Loop" HorizontalExpand="True"
+                    SizeFlagsStretchRatio="1" />
+        </BoxContainer>
+        <!-- Playback slider -->
+        <Slider Name="PlaybackSlider" HorizontalExpand="True" />
+        <!-- Status label -->
+        <Label Name="StatusLabel" Text="Idle" HorizontalExpand="True" />
+    </BoxContainer>
+</ui:FancyWindow>

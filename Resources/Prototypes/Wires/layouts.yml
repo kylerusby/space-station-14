@@ -233,3 +233,9 @@
   wires:
   - !type:AccessWireAction
   - !type:AiInteractWireAction
+
+- type: wireLayout
+  id: Loudspeaker
+  wires:
+  - !type:PowerWireAction
+  - !type:LoudspeakerWireAction

@@ -1,0 +1,139 @@
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: BaseLoudspeaker
+  name: loudspeaker
+  description: loudspeaker-description
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: Structures/Wallmounts/loudspeaker.rsi
+    layers:
+    - state: base
+    - state: on
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: playing
+      map: ["enum.LoudspeakerVisualLayers.Playing"]
+      shader: unshaded
+      visible: false
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.WiresVisualLayers.MaintenancePanel:
+        enum.WiresVisualLayers.MaintenancePanel:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerCommon
+  - type: Instrument
+    allowPercussion: true
+    allowProgramChange: true
+  - type: StationAiWhitelist
+  - type: ActivatableUIRequiresPower
+  - type: ActivatableUI
+    key: enum.LoudspeakerUiKey.Key
+    singleUser: true
+  - type: UserInterface
+    interfaces:
+      enum.LoudspeakerUiKey.Key:
+        type: LoudspeakerBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: ApcPowerReceiver
+    powerLoad: 10
+  - type: ExtensionCableReceiver
+  - type: Wires
+    layoutId: Loudspeaker
+    boardName: wires-board-name-loudspeaker
+  - type: WiresPanel
+  - type: AccessReader
+    access: [["Engineering"], ["Command"]]
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerCommon
+  suffix: Common
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerCommon
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerCommand
+  suffix: Command
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerCommand
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerEngineering
+  suffix: Engineering
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerEngineering
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerMedical
+  suffix: Medical
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerMedical
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerScience
+  suffix: Science
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerScience
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerSecurity
+  suffix: Security
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerSecurity
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerService
+  suffix: Service
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerService
+
+- type: entity
+  parent: BaseLoudspeaker
+  id: LoudspeakerSupply
+  suffix: Supply
+  components:
+  - type: Loudspeaker
+    speakerGroup: LoudspeakerSupply

@@ -1,0 +1,39 @@
+- type: loudspeakerGroup
+  id: LoudspeakerCommon
+  name: loudspeaker-group-common
+  color: "#90EE90"
+
+- type: loudspeakerGroup
+  id: LoudspeakerCommand
+  name: loudspeaker-group-command
+  color: "#fcdf03"
+
+- type: loudspeakerGroup
+  id: LoudspeakerEngineering
+  name: loudspeaker-group-engineering
+  color: "#ff733c"
+
+- type: loudspeakerGroup
+  id: LoudspeakerMedical
+  name: loudspeaker-group-medical
+  color: "#57b8f0"
+
+- type: loudspeakerGroup
+  id: LoudspeakerScience
+  name: loudspeaker-group-science
+  color: "#cd7ccd"
+
+- type: loudspeakerGroup
+  id: LoudspeakerSecurity
+  name: loudspeaker-group-security
+  color: "#ff4242"
+
+- type: loudspeakerGroup
+  id: LoudspeakerService
+  name: loudspeaker-group-service
+  color: "#539c00"
+
+- type: loudspeakerGroup
+  id: LoudspeakerSupply
+  name: loudspeaker-group-supply
+  color: "#b48b57"

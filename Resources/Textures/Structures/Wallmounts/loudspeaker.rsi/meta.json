@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created for space-station-14 loudspeaker feature",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "base"
+        },
+        {
+            "name": "on"
+        },
+        {
+            "name": "playing"
+        },
+        {
+            "name": "panel"
+        }
+    ]
+}

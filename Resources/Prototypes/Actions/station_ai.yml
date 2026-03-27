@@ -57,3 +57,19 @@
     useDelay: 0.5
   - type: InstantAction
     event: !type:ToggleLawsScreenEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionAILoudspeaker
+  name: Loudspeaker
+  description: Open the loudspeaker control panel to play music across the station.
+  components:
+  - type: Action
+    priority: -4
+    itemIconStyle: NoItem
+    icon:
+      sprite: Structures/Wallmounts/loudspeaker.rsi
+      state: base
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:ToggleLoudspeakerEvent
