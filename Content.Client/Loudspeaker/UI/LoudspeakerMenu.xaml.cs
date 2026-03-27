@@ -20,6 +20,7 @@ public sealed partial class LoudspeakerMenu : FancyWindow
 
     private readonly Dictionary<string, CheckBox> _groupCheckBoxes = new();
     private bool _playing;
+    private bool _midiLoaded;
 
     // General MIDI instrument names (program 0-127, bank 0)
     private static readonly string[] MidiInstruments =
@@ -114,10 +115,12 @@ public sealed partial class LoudspeakerMenu : FancyWindow
     public void SetPlaying(bool playing, List<ProtoId<LoudspeakerGroupPrototype>>? activeGroups)
     {
         _playing = playing;
-        PlayButton.Disabled = playing;
         StopButton.Disabled = !playing;
         FileButton.Disabled = playing;
         InstrumentSelect.Disabled = playing;
+
+        // Play button disabled if already playing OR no MIDI loaded.
+        PlayButton.Disabled = playing || !_midiLoaded;
 
         if (playing && activeGroups != null)
         {
@@ -125,7 +128,37 @@ public sealed partial class LoudspeakerMenu : FancyWindow
         }
         else
         {
-            StatusLabel.Text = "Idle";
+            StatusLabel.Text = _midiLoaded ? "MIDI loaded — select groups and press Play" : "Idle";
+        }
+    }
+
+    public void SetMidiLoaded(bool loaded)
+    {
+        _midiLoaded = loaded;
+        PlayButton.Disabled = _playing || !loaded;
+
+        if (!_playing)
+            StatusLabel.Text = loaded ? "MIDI loaded — select groups and press Play" : "Idle";
+    }
+
+    public void UpdatePlayback(int tick, int totalTick, bool isPlaying)
+    {
+        if (totalTick > 0)
+        {
+            PlaybackSlider.MaxValue = totalTick;
+            PlaybackSlider.Value = tick;
+        }
+
+        // Update stop button based on actual renderer state.
+        if (!isPlaying && _playing)
+        {
+            // Playback ended naturally.
+            _playing = false;
+            StopButton.Disabled = true;
+            PlayButton.Disabled = !_midiLoaded;
+            FileButton.Disabled = false;
+            InstrumentSelect.Disabled = false;
+            StatusLabel.Text = _midiLoaded ? "MIDI loaded — select groups and press Play" : "Idle";
         }
     }
 }

@@ -153,9 +153,10 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
             if (!selectedSet.Contains(speaker.SpeakerGroup.Id))
                 continue;
 
-            // Set as puppet of the master, sync instrument program.
+            // Set as puppet of the master, sync instrument program and enforce it.
             instrument.Master = uid;
             instrument.Playing = true;
+            instrument.AllowProgramChange = masterInstrument.AllowProgramChange;
             instrument.FilteredChannels.SetAll(false);
             _sharedInstrument.SetInstrumentProgram(speakerUid, instrument, masterInstrument.InstrumentProgram, masterInstrument.InstrumentBank);
             Dirty(speakerUid, instrument);
@@ -172,16 +173,22 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
 
     private void OnSetInstrument(EntityUid uid, LoudspeakerComponent component, LoudspeakerSetInstrumentMessage args)
     {
-        // Set on the master speaker.
+        // Set on the master speaker and disable program change so the selected instrument is enforced.
         if (TryComp<InstrumentComponent>(uid, out var master))
+        {
+            master.AllowProgramChange = false;
             _sharedInstrument.SetInstrumentProgram(uid, master, args.Program, args.Bank);
+        }
 
         // Propagate to all puppets.
         var query = EntityQueryEnumerator<LoudspeakerComponent, InstrumentComponent>();
         while (query.MoveNext(out var speakerUid, out _, out var instrument))
         {
             if (instrument.Master == uid)
+            {
+                instrument.AllowProgramChange = false;
                 _sharedInstrument.SetInstrumentProgram(speakerUid, instrument, args.Program, args.Bank);
+            }
         }
     }
 
