@@ -15,6 +15,7 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
 {
     [Dependency] private readonly UserInterfaceSystem _bui = default!;
     [Dependency] private readonly InstrumentSystem _instrument = default!;
+    [Dependency] private readonly SharedInstrumentSystem _sharedInstrument = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()
@@ -27,6 +28,7 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
             subs.Event<LoudspeakerRequestGroupsMessage>(OnRequestGroups);
             subs.Event<LoudspeakerPlayMessage>(OnPlay);
             subs.Event<LoudspeakerStopMessage>(OnStop);
+            subs.Event<LoudspeakerSetInstrumentMessage>(OnSetInstrument);
         });
 
         SubscribeLocalEvent<LoudspeakerComponent, PowerChangedEvent>(OnPowerChanged);
@@ -151,17 +153,36 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
             if (!selectedSet.Contains(speaker.SpeakerGroup.Id))
                 continue;
 
-            // Set as puppet of the master.
+            // Set as puppet of the master, sync instrument program.
             instrument.Master = uid;
             instrument.Playing = true;
             instrument.FilteredChannels.SetAll(false);
+            _sharedInstrument.SetInstrumentProgram(speakerUid, instrument, masterInstrument.InstrumentProgram, masterInstrument.InstrumentBank);
             Dirty(speakerUid, instrument);
         }
+
+        SendState(uid, args.Actor);
     }
 
     private void OnStop(EntityUid uid, LoudspeakerComponent component, LoudspeakerStopMessage args)
     {
         CleanAllPuppets(uid);
+        SendState(uid, args.Actor);
+    }
+
+    private void OnSetInstrument(EntityUid uid, LoudspeakerComponent component, LoudspeakerSetInstrumentMessage args)
+    {
+        // Set on the master speaker.
+        if (TryComp<InstrumentComponent>(uid, out var master))
+            _sharedInstrument.SetInstrumentProgram(uid, master, args.Program, args.Bank);
+
+        // Propagate to all puppets.
+        var query = EntityQueryEnumerator<LoudspeakerComponent, InstrumentComponent>();
+        while (query.MoveNext(out var speakerUid, out _, out var instrument))
+        {
+            if (instrument.Master == uid)
+                _sharedInstrument.SetInstrumentProgram(speakerUid, instrument, args.Program, args.Bank);
+        }
     }
 
     /// <summary>

@@ -86,6 +86,22 @@ public sealed class LoudspeakerStateMessage : BoundUserInterfaceMessage
 }
 
 /// <summary>
+/// AI sets the MIDI instrument program on the master and all puppets.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class LoudspeakerSetInstrumentMessage : BoundUserInterfaceMessage
+{
+    public byte Program;
+    public byte Bank;
+
+    public LoudspeakerSetInstrumentMessage(byte program, byte bank)
+    {
+        Program = program;
+        Bank = bank;
+    }
+}
+
+/// <summary>
 /// Raised when the AI uses the loudspeaker action button.
 /// </summary>
 public sealed partial class ToggleLoudspeakerEvent : InstantActionEvent;

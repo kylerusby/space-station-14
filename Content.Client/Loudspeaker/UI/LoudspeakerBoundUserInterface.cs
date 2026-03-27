@@ -30,6 +30,7 @@ public sealed class LoudspeakerBoundUserInterface : BoundUserInterface
         _menu.OnPlayPressed += OnPlayPressed;
         _menu.OnStopPressed += OnStopPressed;
         _menu.OnLoopToggled += OnLoopToggled;
+        _menu.OnInstrumentChanged += OnInstrumentChanged;
 
         SendMessage(new LoudspeakerRequestGroupsMessage());
     }
@@ -84,5 +85,10 @@ public sealed class LoudspeakerBoundUserInterface : BoundUserInterface
 
         instrument.LoopMidi = looping;
         _instruments.UpdateRenderer(Owner);
+    }
+
+    private void OnInstrumentChanged(byte program, byte bank)
+    {
+        SendMessage(new LoudspeakerSetInstrumentMessage(program, bank));
     }
 }
