@@ -3,7 +3,10 @@ using Content.Server.Power.Components;
 using Content.Shared.Instruments;
 using Content.Shared.Loudspeaker;
 using Content.Shared.Power;
+using Content.Shared.Silicons.StationAi;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Loudspeaker;
@@ -27,6 +30,28 @@ public sealed class LoudspeakerSystem : SharedLoudspeakerSystem
         });
 
         SubscribeLocalEvent<LoudspeakerComponent, PowerChangedEvent>(OnPowerChanged);
+        SubscribeLocalEvent<StationAiHeldComponent, ToggleLoudspeakerEvent>(OnToggleLoudspeaker);
+    }
+
+    private void OnToggleLoudspeaker(EntityUid uid, StationAiHeldComponent component, ToggleLoudspeakerEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        // Find the first powered+enabled loudspeaker on the station to use as the UI host.
+        var query = EntityQueryEnumerator<LoudspeakerComponent, ApcPowerReceiverComponent>();
+        while (query.MoveNext(out var speakerUid, out var speaker, out var power))
+        {
+            if (!speaker.Enabled || !power.Powered)
+                continue;
+
+            if (!TryComp<ActorComponent>(uid, out var actor))
+                return;
+
+            args.Handled = true;
+            _bui.TryToggleUi(speakerUid, LoudspeakerUiKey.Key, actor.PlayerSession);
+            return;
+        }
     }
 
     private void OnBuiOpened(EntityUid uid, LoudspeakerComponent component, BoundUIOpenedEvent args)

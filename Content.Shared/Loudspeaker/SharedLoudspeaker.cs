@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared.Actions;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -83,6 +84,11 @@ public sealed class LoudspeakerStateMessage : BoundUserInterfaceMessage
         ActiveGroups = activeGroups;
     }
 }
+
+/// <summary>
+/// Raised when the AI uses the loudspeaker action button.
+/// </summary>
+public sealed partial class ToggleLoudspeakerEvent : InstantActionEvent;
 
 [Serializable, NetSerializable]
 public enum LoudspeakerWireStatus

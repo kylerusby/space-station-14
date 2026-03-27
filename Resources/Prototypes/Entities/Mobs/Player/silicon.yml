@@ -36,6 +36,7 @@
     - ActionJumpToCore
     - ActionSurvCameraLights
     - ActionAIViewLaws
+    - ActionAILoudspeaker
   - type: UserInterface
     interfaces:
       enum.RadarConsoleUiKey.Key:
